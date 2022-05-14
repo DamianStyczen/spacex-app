@@ -1,4 +1,4 @@
-import { Launch } from "./FlightListTypes";
+import { Launch } from "../types/FlightListTypes";
 
 type Props = {
   launch: Launch;

@@ -1,7 +1,7 @@
-import { Launch } from './FlightListTypes'
+import { Launch } from '../types/FlightListTypes'
 import LaunchRow from './FlightListRow'
 
-import './FlightList.css';
+import styles from '../styles/FlightList.module.css';
 
 
 const FLIGHT_LIST_TABLE_HEADERS = ['id', 'date', 'site name', 'mission', 'rocket', 'ship', 'port', 'image'];
@@ -11,7 +11,7 @@ type Props = {
 }
 
 export default function FlightList({ launches }: Props) {
-    return (<table>
+    return (<table className={styles.table}>
         <thead>
           <tr>
             { FLIGHT_LIST_TABLE_HEADERS.map(header => <th>{header}</th>)}
