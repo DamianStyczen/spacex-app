@@ -1,15 +1,43 @@
-import type { GetStaticProps, NextPage } from 'next'
+import type { GetServerSideProps, GetStaticProps } from 'next'
+import { useEffect, useState } from 'react';
 import Head from 'next/head'
-import Image from 'next/image'
 import FlightList from '../components/FlightList'
 import styles from '../styles/Home.module.css'
 import { Launch } from '../types/FlightListTypes'
 
 interface FlightListPageProps {
-  launches: Launch[];
+  initialLaunches: Launch[];
 }
 
-const FlightListPage = ({ launches }: FlightListPageProps) => {
+const FlightListPage = ({ initialLaunches }: FlightListPageProps) => {
+  const [page, setPage] = useState(0);
+  const [perPage, setPerPage] = useState(10);
+  const [launches, setLaunches] = useState(initialLaunches);
+  const [isFirstRender, setIsFirstRender] = useState(true);
+
+  useEffect(() => {
+    if (isFirstRender) {
+      setIsFirstRender(false);
+
+      return;
+    }
+    const fetchLaunches = async () => {
+      const response = await fetch(`https://api.spacexdata.com/v3/launches?offset=${page * perPage}&limit=${perPage}`);
+      const launches = await response.json();
+
+      setLaunches(launches);
+    }
+
+    fetchLaunches();
+  }, [page, perPage]);
+
+  const paginationProps = {
+    page,
+    perPage,
+    setPage,
+    setPerPage
+  };
+
   return (
     <div className={styles.container}>
       <Head>
@@ -23,7 +51,7 @@ const FlightListPage = ({ launches }: FlightListPageProps) => {
           SpaceX Launches
         </h1>
 
-        <FlightList launches={launches} />
+        <FlightList launches={launches} {...paginationProps}/>
       </main>
 
       <footer className={styles.footer}>
@@ -39,13 +67,17 @@ const FlightListPage = ({ launches }: FlightListPageProps) => {
   )
 }
 
-export const getStaticProps: GetStaticProps = async () => {
-  const response = await fetch('https://api.spacexdata.com/v3/launches?limit=10');
-  const launches = await response.json();
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+  const page = Number(query.page) || 1;
+  const perPage = Number(query.perPage) || 10;
+
+  const response = await fetch(`https://api.spacexdata.com/v3/launches?page=${page * perPage}&limit=${perPage}`);
+  const initialLaunches = await response.json();
 
   return {
     props: {
-      launches
+      initialLaunches,
+
     }
   }
 }

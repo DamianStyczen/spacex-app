@@ -1,4 +1,8 @@
 import { Launch } from "../types/FlightListTypes";
+import TableCell from '@mui/material/TableCell';
+import TableRow from '@mui/material/TableRow';
+import Button from '@mui/material/Button';
+import Link from 'next/link';
 
 type Props = {
   launch: Launch;
@@ -6,23 +10,21 @@ type Props = {
 
 export default function LaunchRow({ launch }: Props) {
   return (
-    <tr key={launch.id}>
-      <td>
-        <strong>{launch.id}</strong>
-      </td>
-      <td>{launch.launch_date_local}</td>
-      <td>{launch.launch_site.site_name_long}</td>
-      <td>{launch.mission_name}</td>
-      <td>{launch.rocket.rocket_name}</td>
-      <td>{launch.ships[0]?.name}</td>
-      <td>{launch.ships[0]?.home_port}</td>
-      <td>
-        <img
-          src={launch.ships[0]?.image}
-          alt={launch.ships[0]?.name}
-          width="100px"
-        />
-      </td>
-    </tr>
+    <TableRow
+      key={launch.flight_number}
+      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+    >
+      <TableCell component="th" scope="row">
+        {launch.mission_name}
+      </TableCell>
+      <TableCell>{new Date(launch.launch_date_local).toLocaleString()}</TableCell>
+      <TableCell>{launch.launch_site.site_name_long}</TableCell>
+      <TableCell>{launch.rocket.rocket_name}</TableCell>
+      <TableCell>
+        <Link href={`/launches/${launch.flight_number}`} passHref>
+          <Button size='small' >Details</Button>
+        </Link>
+      </TableCell>
+    </TableRow>
   );
 }

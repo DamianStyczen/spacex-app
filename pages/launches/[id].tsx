@@ -19,7 +19,7 @@ const LaunchDetailsPage = ({ data }: LaunchDetailsPageProps) => {
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          SpaceX Lauch {data.mission_name}
+          SpaceX Launch {data.mission_name}
         </h1>
 
         <FlightDetails />

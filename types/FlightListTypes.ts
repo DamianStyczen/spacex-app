@@ -6,7 +6,7 @@ export type Ship =
   }
 
   export type Launch = {
-  id: string;
+  flight_number: string;
   launch_date_local: string;
   launch_site: {
     site_name_long: string;
