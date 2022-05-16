@@ -20,6 +20,13 @@ const FlightListPage = ({
   const [perPage, setPerPage] = useState(initialPerPage);
   const [launches, setLaunches] = useState(initialLaunches);
   const [isFirstRender, setIsFirstRender] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
+
+  const handleSearchClick = () => {
+    // TODO:
+    // Implement search
+  };
 
   useEffect(() => {
     if (isFirstRender) {
@@ -27,15 +34,18 @@ const FlightListPage = ({
 
       return;
     }
+
     const fetchLaunches = async () => {
+      setIsLoading(true);
       const response = await fetch(
         `https://api.spacexdata.com/v3/launches?offset=${
           page * perPage
-        }&limit=${perPage}`
+        }&limit=${perPage}&order=desc`
       );
       const launches = await response.json();
 
       setLaunches(launches);
+      setIsLoading(false);
     };
 
     fetchLaunches();
@@ -48,6 +58,12 @@ const FlightListPage = ({
     setPerPage,
   };
 
+  const searchProps = {
+    searchValue,
+    setSearchValue,
+    handleSearchClick,
+  };
+
   return (
     <>
       <Head>
@@ -56,7 +72,12 @@ const FlightListPage = ({
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout>
-        <FlightList launches={launches} {...paginationProps} />
+        <FlightList
+          launches={launches}
+          {...paginationProps}
+          {...searchProps}
+          isLoading={isLoading}
+        />
       </Layout>
     </>
   );
@@ -69,7 +90,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const response = await fetch(
     `https://api.spacexdata.com/v3/launches?page=${
       initialPage * initialPerPage
-    }&limit=${initialPerPage}`
+    }&limit=${initialPerPage}&order=desc`
   );
   const initialLaunches = await response.json();
 
