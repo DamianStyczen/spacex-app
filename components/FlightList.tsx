@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from "react";
+import { useCallback, useRef, useEffect, useState } from "react";
 import { Launch } from "../types/FlightListTypes";
 import FlightListRow from "./FlightListRow";
 import Table from "@mui/material/Table";
@@ -17,7 +17,7 @@ import IconButton from "@mui/material/IconButton";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import { gql } from "@apollo/client";
-// import { debounce } from "lodash";
+import debounce from "lodash.debounce";
 
 export const LAUNCHES_QUERY = gql`
   query launches($limit: Int!, $offset: Int!, $find: String) {
@@ -58,8 +58,6 @@ type FlightListProps = {
   isLoading: boolean;
   searchValue: string;
   setSearchValue: (search: string) => void;
-  handleSearchClick: () => void;
-  fetchNextPage: (page: number, perPage: number) => void;
 };
 
 export default function FlightList({
@@ -70,6 +68,7 @@ export default function FlightList({
   setPerPage,
   isLoading,
   searchValue,
+  setSearchValue,
 }: FlightListProps) {
   const [loaderHeight, setLoaderHeight] = useState(637);
   const [inputValue, setInputValue] = useState(searchValue);
@@ -84,14 +83,25 @@ export default function FlightList({
     setLoaderHeight(newLoaderHeight);
   }, [isLoading]);
 
-  const handleChangePage = (event: unknown, newPage: number) => {
+  const search = useCallback(
+    debounce((value) => {
+      setSearchValue(value);
+      setPage(0);
+    }, 300),
+    []
+  );
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+    search(e.target.value);
+  };
+
+  const changePage = (e: unknown, newPage: number) => {
     setPage(newPage);
   };
 
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setPerPage(parseInt(event.target.value, 10));
+  const changeRowsPerPage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPerPage(parseInt(e.target.value, 10));
     setPage(0);
   };
 
@@ -125,9 +135,9 @@ export default function FlightList({
                     id="search"
                     type="text"
                     value={inputValue}
-                    onChange={(e) => setInputValue(e.target.value)}
-                    endAdornment={
-                      <InputAdornment position="end">
+                    onChange={handleInputChange}
+                    startAdornment={
+                      <InputAdornment position="start">
                         <IconButton aria-label="toggle password visibility">
                           <SearchIcon />
                         </IconButton>
@@ -154,8 +164,8 @@ export default function FlightList({
         component="div"
         rowsPerPage={perPage}
         page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
+        onPageChange={changePage}
+        onRowsPerPageChange={changeRowsPerPage}
       />
     </Paper>
   );

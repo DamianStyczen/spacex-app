@@ -1,8 +1,9 @@
 import { useMemo } from 'react'
 import { ApolloClient, HttpLink, InMemoryCache, NormalizedCacheObject } from '@apollo/client'
-import { concatPagination, relayStylePagination } from '@apollo/client/utilities'
+import { concatPagination } from '@apollo/client/utilities'
 import merge from 'deepmerge'
-import { isEqual } from 'lodash'
+import isEqual from 'lodash.isequal';
+
 
 export const APOLLO_STATE_PROP_NAME = '__APOLLO_STATE__'
 

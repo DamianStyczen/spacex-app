@@ -43,28 +43,13 @@ const FlightListPage = ({
 
       return;
     }
+
     refetch({
       limit: perPage,
       offset: page * perPage,
       find: searchValue,
     });
   }, [page, perPage, searchValue]);
-
-  const fetchNextPage = (page: number, perPage: number) => {
-    refetch({
-      limit: perPage,
-      offset: page * perPage,
-      find: searchValue,
-    });
-  };
-
-  const handleSearchClick = () => {
-    refetch({
-      limit: perPage,
-      offset: page * perPage,
-      find: searchValue,
-    });
-  };
 
   const paginationProps = {
     page,
@@ -76,7 +61,6 @@ const FlightListPage = ({
   const searchProps = {
     searchValue,
     setSearchValue,
-    handleSearchClick,
   };
 
   return (
@@ -89,10 +73,9 @@ const FlightListPage = ({
       <Layout>
         <FlightList
           launches={data.launches}
+          isLoading={loading}
           {...paginationProps}
           {...searchProps}
-          isLoading={loading}
-          fetchNextPage={fetchNextPage}
         />
       </Layout>
     </>
