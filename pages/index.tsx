@@ -1,32 +1,41 @@
 import type { GetServerSideProps } from "next";
 import { useEffect, useState } from "react";
 import Head from "next/head";
-import FlightList from "../components/FlightList";
+import FlightList, { LAUNCHES_QUERY } from "../components/FlightList";
 import { Launch } from "../types/FlightListTypes";
 import Layout from "../components/Layout";
+import { useQuery } from "@apollo/client";
+import { initializeApollo, addApolloState } from "../lib/apolloClient";
 
 interface FlightListPageProps {
   initialLaunches: Launch[];
   initialPage: number;
   initialPerPage: number;
+  initialSearch: string;
 }
 
 const FlightListPage = ({
-  initialLaunches,
   initialPage,
   initialPerPage,
+  initialSearch,
 }: FlightListPageProps) => {
   const [page, setPage] = useState(initialPage);
   const [perPage, setPerPage] = useState(initialPerPage);
-  const [launches, setLaunches] = useState(initialLaunches);
-  const [isFirstRender, setIsFirstRender] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
-  const [searchValue, setSearchValue] = useState("");
+  const [searchValue, setSearchValue] = useState(initialSearch);
 
-  const handleSearchClick = () => {
-    // TODO:
-    // Implement search
-  };
+  const [isFirstRender, setIsFirstRender] = useState(true);
+
+  const { loading, error, data, refetch, networkStatus } = useQuery(
+    LAUNCHES_QUERY,
+    {
+      variables: {
+        limit: perPage,
+        offset: page * perPage,
+        find: searchValue,
+      },
+      notifyOnNetworkStatusChange: true,
+    }
+  );
 
   useEffect(() => {
     if (isFirstRender) {
@@ -34,22 +43,28 @@ const FlightListPage = ({
 
       return;
     }
+    refetch({
+      limit: perPage,
+      offset: page * perPage,
+      find: searchValue,
+    });
+  }, [page, perPage, searchValue]);
 
-    const fetchLaunches = async () => {
-      setIsLoading(true);
-      const response = await fetch(
-        `https://api.spacexdata.com/v3/launches?offset=${
-          page * perPage
-        }&limit=${perPage}&order=desc`
-      );
-      const launches = await response.json();
+  const fetchNextPage = (page: number, perPage: number) => {
+    refetch({
+      limit: perPage,
+      offset: page * perPage,
+      find: searchValue,
+    });
+  };
 
-      setLaunches(launches);
-      setIsLoading(false);
-    };
-
-    fetchLaunches();
-  }, [page, perPage]);
+  const handleSearchClick = () => {
+    refetch({
+      limit: perPage,
+      offset: page * perPage,
+      find: searchValue,
+    });
+  };
 
   const paginationProps = {
     page,
@@ -73,10 +88,11 @@ const FlightListPage = ({
       </Head>
       <Layout>
         <FlightList
-          launches={launches}
+          launches={data.launches}
           {...paginationProps}
           {...searchProps}
-          isLoading={isLoading}
+          isLoading={loading}
+          fetchNextPage={fetchNextPage}
         />
       </Layout>
     </>
@@ -84,23 +100,31 @@ const FlightListPage = ({
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+  const apolloClient = initializeApollo();
+
   const initialPage = Number(query.page) || 0;
   const initialPerPage = Number(query.perPage) || 10;
+  const initialSearch = query.search || "";
 
-  const response = await fetch(
-    `https://api.spacexdata.com/v3/launches?page=${
-      initialPage * initialPerPage
-    }&limit=${initialPerPage}&order=desc`
-  );
-  const initialLaunches = await response.json();
+  const queryVariables = {
+    limit: initialPerPage,
+    offset: initialPage * initialPerPage,
+    find: initialSearch,
+  };
 
-  return {
+  const { data } = await apolloClient.query({
+    query: LAUNCHES_QUERY,
+    variables: queryVariables,
+  });
+
+  return addApolloState(apolloClient, {
     props: {
-      initialLaunches,
+      initialLaunches: data.launches,
       initialPage,
       initialPerPage,
+      initialSearch,
     },
-  };
+  });
 };
 
 export default FlightListPage;

@@ -10,7 +10,7 @@ export type Ship =
   launch_success: boolean;
   launch_date_local: string;
   launch_site: {
-    site_name_long: string;
+    site_name: string;
   };
   mission_name: string;
   rocket: {

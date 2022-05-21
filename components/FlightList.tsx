@@ -16,6 +16,30 @@ import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
+import { gql } from "@apollo/client";
+// import { debounce } from "lodash";
+
+export const LAUNCHES_QUERY = gql`
+  query launches($limit: Int!, $offset: Int!, $find: String) {
+    launches(
+      find: { mission_name: $find }
+      limit: $limit
+      offset: $offset
+      sort: "launch_date_local"
+      order: "desc"
+    ) {
+      mission_name
+      launch_date_local
+      launch_success
+      launch_site {
+        site_name
+      }
+      rocket {
+        rocket_name
+      }
+    }
+  }
+`;
 
 const FLIGHT_LIST_TABLE_HEADERS = [
   "Mission",
@@ -35,6 +59,7 @@ type FlightListProps = {
   searchValue: string;
   setSearchValue: (search: string) => void;
   handleSearchClick: () => void;
+  fetchNextPage: (page: number, perPage: number) => void;
 };
 
 export default function FlightList({
@@ -45,10 +70,9 @@ export default function FlightList({
   setPerPage,
   isLoading,
   searchValue,
-  setSearchValue,
-  handleSearchClick,
 }: FlightListProps) {
   const [loaderHeight, setLoaderHeight] = useState(637);
+  const [inputValue, setInputValue] = useState(searchValue);
   const tableBodyRef = useRef<HTMLTableSectionElement | null>(null);
 
   useEffect(() => {
@@ -71,10 +95,6 @@ export default function FlightList({
     setPage(0);
   };
 
-  if (!launches) {
-    return null;
-  }
-
   const loader = (
     <TableRow>
       <TableCell
@@ -89,7 +109,7 @@ export default function FlightList({
     </TableRow>
   );
   const output = launches.map((launch: Launch) => (
-    <FlightListRow launch={launch} />
+    <FlightListRow launch={launch} key={launch.mission_name} />
   ));
 
   return (
@@ -104,14 +124,11 @@ export default function FlightList({
                   <Input
                     id="search"
                     type="text"
-                    value={searchValue}
-                    onChange={(e) => setSearchValue(e.target.value)}
+                    value={inputValue}
+                    onChange={(e) => setInputValue(e.target.value)}
                     endAdornment={
                       <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={handleSearchClick}
-                        >
+                        <IconButton aria-label="toggle password visibility">
                           <SearchIcon />
                         </IconButton>
                       </InputAdornment>
@@ -132,7 +149,7 @@ export default function FlightList({
         </Table>
       </TableContainer>
       <TablePagination
-        count={30} // TODO: fix count
+        count={100} // TODO: fix count
         rowsPerPageOptions={[5, 10, 25]}
         component="div"
         rowsPerPage={perPage}
