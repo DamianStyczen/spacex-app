@@ -6,9 +6,10 @@ export type Ship =
   }
 
   export type Launch = {
-  flight_number: string;
+  id: string;
   launch_success: boolean;
   launch_date_local: string;
+  details: string;
   launch_site: {
     site_name: string;
   };
@@ -18,6 +19,8 @@ export type Ship =
   }
   ships: Ship[];
   links: {
-    youtube_id: string;
-  }
+    article_link: string | null;
+    video_link: string | null;
+    flickr_images: string[],
+  },
 };

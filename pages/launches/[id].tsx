@@ -3,10 +3,28 @@ import Head from "next/head";
 import FlightDetails from "../../components/FlightDetails";
 import { Launch } from "../../types/FlightListTypes";
 import Layout from "../../components/Layout";
+import { initializeApollo, addApolloState } from "../../lib/apolloClient";
+import { gql } from "@apollo/client";
 
 interface LaunchDetailsPageProps {
   data: Launch;
 }
+
+export const LAUNCH_DETAILS_QUERY = gql`
+  query launch($id: ID!) {
+    launch(id: $id) {
+      mission_name
+      details
+      launch_success
+      launch_date_local
+      links {
+        article_link
+        flickr_images
+        video_link
+      }
+    }
+  }
+`;
 
 const LaunchDetailsPage = ({ data }: LaunchDetailsPageProps) => {
   return (
@@ -23,15 +41,21 @@ const LaunchDetailsPage = ({ data }: LaunchDetailsPageProps) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const response = await fetch(
-    `https://api.spacexdata.com/v3/launches/${context?.params?.id}`
-  );
-  const data = await response.json();
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+  const apolloClient = initializeApollo();
+
+  const queryVariables = {
+    id: params?.id,
+  };
+
+  const { data } = await apolloClient.query({
+    query: LAUNCH_DETAILS_QUERY,
+    variables: queryVariables,
+  });
 
   return {
     props: {
-      data,
+      data: data.launch,
     },
   };
 };

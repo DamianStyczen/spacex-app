@@ -28,6 +28,7 @@ export const LAUNCHES_QUERY = gql`
       sort: "launch_date_local"
       order: "desc"
     ) {
+      id
       mission_name
       launch_date_local
       launch_success

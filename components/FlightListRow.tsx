@@ -20,7 +20,7 @@ export default function LaunchRow({ launch }: Props) {
       <TableCell>{launch.launch_site.site_name}</TableCell>
       <TableCell>{launch.rocket.rocket_name}</TableCell>
       <TableCell>
-        <Link href={`/launches/${launch.flight_number}`} passHref>
+        <Link href={`/launches/${launch.id}`} passHref>
           <Button size="small">Details</Button>
         </Link>
       </TableCell>

@@ -3,6 +3,7 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Toolbar from "@mui/material/Toolbar";
+import Link from "next/link";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -20,7 +21,7 @@ export default function Layout({ children }: LayoutProps) {
             noWrap
             sx={{ flexGrow: 1 }}
           >
-            SpaceX Launches
+            <Link href="/">SpaceX Launches</Link>
           </Typography>
         </Toolbar>
       </AppBar>
