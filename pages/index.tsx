@@ -1,11 +1,12 @@
 import type { GetServerSideProps } from "next";
 import { useEffect, useState } from "react";
 import Head from "next/head";
-import FlightList, { LAUNCHES_QUERY } from "../components/FlightList";
+import FlightList from "../components/FlightList";
 import { Launch } from "../types/FlightListTypes";
 import Layout from "../components/Layout";
 import { useQuery } from "@apollo/client";
 import { initializeApollo, addApolloState } from "../lib/apolloClient";
+import LAUNCHES_QUERY from "../schemas/launches";
 
 interface FlightListPageProps {
   initialLaunches: Launch[];
