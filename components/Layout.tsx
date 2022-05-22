@@ -11,7 +11,16 @@ interface LayoutProps {
 
 export default function Layout({ children }: LayoutProps) {
   return (
-    <Box sx={{ flexGrow: "1" }}>
+    <Box
+      sx={{
+        backgroundColor: (theme) =>
+          theme.palette.mode === "light"
+            ? theme.palette.grey[100]
+            : theme.palette.grey[900],
+        flexGrow: "1",
+        minHeight: "100vh",
+      }}
+    >
       <AppBar position="static">
         <Toolbar>
           <Typography
@@ -25,29 +34,23 @@ export default function Layout({ children }: LayoutProps) {
           </Typography>
         </Toolbar>
       </AppBar>
-      <Box
-        component="main"
-        sx={{
-          backgroundColor: (theme) =>
-            theme.palette.mode === "light"
-              ? theme.palette.grey[100]
-              : theme.palette.grey[900],
-          flexGrow: 1,
-          height: "100vh",
-          overflow: "auto",
-        }}
-      >
+      <Box component="main">
         <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
           {children}
         </Container>
       </Box>
-      <footer data-testid="footer">
+      <Box
+        component="footer"
+        sx={{
+          minHeight: "4rem",
+        }}
+        data-testid="footer"
+      >
         <Box
           sx={{
-            marginInline: "auto",
+            margin: "2rem auto",
             maxWidth: "25ch",
             textAlign: "center",
-            marginBottom: "1rem",
           }}
         >
           Created by{" "}
@@ -67,7 +70,7 @@ export default function Layout({ children }: LayoutProps) {
             Omni Calculator
           </a>
         </Box>
-      </footer>
+      </Box>
     </Box>
   );
 }
