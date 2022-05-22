@@ -41,22 +41,31 @@ export default function Layout({ children }: LayoutProps) {
           {children}
         </Container>
         <footer>
-          Created by{" "}
-          <a
-            href="https://linkedin.com/damianstyczen"
-            target="_blank"
-            rel="noopener noreferrer"
+          <Box
+            sx={{
+              marginInline: "auto",
+              maxWidth: "25ch",
+              textAlign: "center",
+              marginBottom: "1rem",
+            }}
           >
-            Damian Styczeń
-          </a>{" "}
-          for{" "}
-          <a
-            href="https://www.omnicalculator.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Omni Calculator
-          </a>
+            Created by{" "}
+            <a
+              href="https://linkedin.com/damianstyczen"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Damian Styczeń
+            </a>{" "}
+            for{" "}
+            <a
+              href="https://www.omnicalculator.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Omni Calculator
+            </a>
+          </Box>
         </footer>
       </Box>
     </Box>

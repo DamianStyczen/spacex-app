@@ -22,6 +22,32 @@ export const LAUNCH_DETAILS_QUERY = gql`
         flickr_images
         video_link
       }
+      rocket {
+        rocket_name
+        rocket_type
+        first_stage {
+          cores {
+            landing_vehicle
+            flight
+            landing_type
+            land_success
+            landing_intent
+            reused
+          }
+        }
+        second_stage {
+          payloads {
+            id
+            reused
+            payload_type
+            payload_mass_kg
+            orbit
+            nationality
+            manufacturer
+            customers
+          }
+        }
+      }
     }
   }
 `;
