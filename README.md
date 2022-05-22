@@ -1,46 +1,52 @@
-# Getting Started with Create React App
+# Hi!
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project was made as an recruitment assignment for [Omni Calculator](https://www.omnicalculator.com/).
 
-## Available Scripts
+## Stack
 
-In the project directory, you can run:
+- **React**
+- **TypeScript**
+- **Next.js** - I've chosen it because of its out-of-the-box routing and SSR features
+- **GraphQL / Apollo** - I had not tried GraphQL before, so I've decided to use this task as an opportunity to learn it
+- **Material UI** - It allowed me to use more time to learn GraphQL, without worrying about the project's design
 
-### `yarn start`
+## Known Issues / Future Improvements
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- **Total number of results in Pagination not displaying properly** - I didn't manage to find information about total results in the API, I mocked this value for now.
+- **One of items in table is repeated** - API returns two different records with the same id (110), which confuses Apollo cache and the first item overrides the second.
+- **Replace imgs with Next Images** - it requires a bit of configuration for Next Images to work with MUI ImageList, but it should improve the performance
+- **Apollo cache configuration** - sometimes it doesn't behave as expected, I need to investigate
+- **Poor test coverage** - not all the major functionalities are well tested, especially pages
+- **End-to-end tests** - it would me nice to implement e2e tests with Cypress
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## How to run
 
-### `yarn test`
+Install packages:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```bash
+npm i
+```
 
-### `yarn build`
+Run:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+npm run dev
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Create a production build:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```bash
+npm run build
+```
 
-### `yarn eject`
+Run tests:
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+```bash
+npm run test
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Run linter:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+```bash
+npm run lint
+```
