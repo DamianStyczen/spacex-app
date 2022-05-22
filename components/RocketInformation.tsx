@@ -36,7 +36,7 @@ const CoresTable = ({ cores }: CoresTableProps) => {
             <TableCell>Landing vehicle</TableCell>
           </TableRow>
         </TableHead>
-        <TableBody>
+        <TableBody data-testid="cores-table-body">
           {cores.map((core, index) => (
             <TableRow
               key={core.landing_vehicle}
@@ -45,11 +45,21 @@ const CoresTable = ({ cores }: CoresTableProps) => {
               <TableCell component="th" scope="row">
                 {index + 1}
               </TableCell>
-              <TableCell>{core.flight}</TableCell>
-              <TableCell>{core.landing_intent ? "Yes" : "No"}</TableCell>
-              <TableCell>{core.landing_type}</TableCell>
-              <TableCell>{core.land_success ? "Yes" : "No"}</TableCell>
-              <TableCell>{core.landing_vehicle || "-"}</TableCell>
+              <TableCell data-testid="cores-table-flight">
+                {core.flight}
+              </TableCell>
+              <TableCell data-testid="cores-table-landing-intent">
+                {core.landing_intent ? "Yes" : "No"}
+              </TableCell>
+              <TableCell data-testid="cores-table-landing-type">
+                {core.landing_type}
+              </TableCell>
+              <TableCell data-testid="cores-table-land-success">
+                {core.land_success ? "Yes" : "No"}
+              </TableCell>
+              <TableCell data-testid="cores-table-landing-vehicle">
+                {core.landing_vehicle || "-"}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -73,7 +83,7 @@ const PayloadsTable = ({ payloads }: PayloadsTableProps) => {
             <TableCell>Customers</TableCell>
           </TableRow>
         </TableHead>
-        <TableBody>
+        <TableBody data-testid="payloads-table-body">
           {payloads.map((payload, index) => (
             <TableRow
               key={index}
@@ -82,12 +92,24 @@ const PayloadsTable = ({ payloads }: PayloadsTableProps) => {
               <TableCell component="th" scope="row">
                 {index + 1}
               </TableCell>
-              <TableCell>{payload.payload_type}</TableCell>
-              <TableCell>{payload.payload_mass_kg}</TableCell>
-              <TableCell>{payload.orbit}</TableCell>
-              <TableCell>{payload.nationality}</TableCell>
-              <TableCell>{payload.manufacturer}</TableCell>
-              <TableCell>{payload.customers.join(", ")}</TableCell>
+              <TableCell data-testid="payloads-table-payload-type">
+                {payload.payload_type}
+              </TableCell>
+              <TableCell data-testid="payloads-table-payload-mass">
+                {payload.payload_mass_kg}
+              </TableCell>
+              <TableCell data-testid="payloads-table-orbit">
+                {payload.orbit}
+              </TableCell>
+              <TableCell data-testid="payloads-table-nationality">
+                {payload.nationality}
+              </TableCell>
+              <TableCell data-testid="payloads-table-manufacturer">
+                {payload.manufacturer}
+              </TableCell>
+              <TableCell data-testid="payloads-table-customers">
+                {payload.customers.join(", ")}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -100,12 +122,17 @@ export default function RocketInformation({ rocket }: RocketInformationProps) {
   return (
     <List>
       <ListItem>
-        <ListItemText primary="Name" secondary={rocket.rocket_name} />
+        <ListItemText
+          primary="Name"
+          secondary={rocket.rocket_name}
+          data-testid="rocket-name"
+        />
       </ListItem>
       <ListItem>
         <ListItemText
           primary="Cores"
           secondary={rocket.first_stage.cores.length}
+          data-testid="cores"
         />
       </ListItem>
       <ListItem>
@@ -115,6 +142,7 @@ export default function RocketInformation({ rocket }: RocketInformationProps) {
         <ListItemText
           primary="Payloads"
           secondary={rocket.second_stage.payloads.length}
+          data-testid="payloads"
         />
       </ListItem>
       <ListItem>

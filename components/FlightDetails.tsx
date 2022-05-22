@@ -46,31 +46,39 @@ export default function FlightDetails({ data }: FlightDetailsProps) {
         ) : null}
         <CardHeader
           title={
-            <Typography component="h1" variant="h5" color="text.primary">
+            <Typography
+              component="h1"
+              variant="h5"
+              color="text.primary"
+              data-testid="details-title"
+            >
               {mission_name}{" "}
               <Chip
                 color={launch_success ? "success" : "error"}
                 label={launch_success ? "Success" : "Failure"}
                 size="small"
+                data-testid="details-success"
               />
             </Typography>
           }
           subheader={new Date(launch_date_local).toLocaleString()}
         ></CardHeader>
         <CardContent>
-          <Typography>{details}</Typography>
+          <Typography data-testid="details-description">{details}</Typography>
           {article_link ? (
             <Typography>
-              <Button href={article_link}>Read more</Button>
+              <Button href={article_link} data-testid="details-article-link">
+                Read more
+              </Button>
             </Typography>
           ) : null}
-          <Accordion title="Rocket" index={0}>
+          <Accordion title="Rocket">
             <RocketInformation rocket={rocket} />
           </Accordion>
-          <Accordion title="Video" index={1} disabled={!video_link}>
+          <Accordion title="Video" disabled={!video_link}>
             {video_link ? <VideoCard url={video_link} /> : null}
           </Accordion>
-          <Accordion title="Images" index={2} disabled={!flickr_images.length}>
+          <Accordion title="Images" disabled={!flickr_images.length}>
             {flickr_images.length ? (
               <ImageList images={flickr_images} missionName={mission_name} />
             ) : null}

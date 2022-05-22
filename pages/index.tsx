@@ -25,17 +25,14 @@ const FlightListPage = ({
 
   const [isFirstRender, setIsFirstRender] = useState(true);
 
-  const { loading, error, data, refetch, networkStatus } = useQuery(
-    LAUNCHES_QUERY,
-    {
-      variables: {
-        limit: perPage,
-        offset: page * perPage,
-        find: searchValue,
-      },
-      notifyOnNetworkStatusChange: true,
-    }
-  );
+  const { loading, data, refetch } = useQuery(LAUNCHES_QUERY, {
+    variables: {
+      limit: perPage,
+      offset: page * perPage,
+      find: searchValue,
+    },
+    notifyOnNetworkStatusChange: true,
+  });
 
   useEffect(() => {
     if (isFirstRender) {
@@ -83,31 +80,35 @@ const FlightListPage = ({
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-  const apolloClient = initializeApollo();
+  try {
+    const apolloClient = initializeApollo();
 
-  const initialPage = Number(query.page) || 0;
-  const initialPerPage = Number(query.perPage) || 10;
-  const initialSearch = query.search || "";
+    const initialPage = Number(query.page) || 0;
+    const initialPerPage = Number(query.perPage) || 10;
+    const initialSearch = query.search || "";
 
-  const queryVariables = {
-    limit: initialPerPage,
-    offset: initialPage * initialPerPage,
-    find: initialSearch,
-  };
+    const queryVariables = {
+      limit: initialPerPage,
+      offset: initialPage * initialPerPage,
+      find: initialSearch,
+    };
 
-  const { data } = await apolloClient.query({
-    query: LAUNCHES_QUERY,
-    variables: queryVariables,
-  });
+    const { data } = await apolloClient.query({
+      query: LAUNCHES_QUERY,
+      variables: queryVariables,
+    });
 
-  return addApolloState(apolloClient, {
-    props: {
-      initialLaunches: data.launches,
-      initialPage,
-      initialPerPage,
-      initialSearch,
-    },
-  });
+    return addApolloState(apolloClient, {
+      props: {
+        initialLaunches: data.launches,
+        initialPage,
+        initialPerPage,
+        initialSearch,
+      },
+    });
+  } catch (e) {
+    return { notFound: true };
+  }
 };
 
 export default FlightListPage;

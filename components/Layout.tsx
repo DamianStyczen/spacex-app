@@ -21,7 +21,7 @@ export default function Layout({ children }: LayoutProps) {
             noWrap
             sx={{ flexGrow: 1 }}
           >
-            <Link href="/">SpaceX Launches</Link>
+            <Link href="/">SpaceX App</Link>
           </Typography>
         </Toolbar>
       </AppBar>
@@ -40,34 +40,34 @@ export default function Layout({ children }: LayoutProps) {
         <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
           {children}
         </Container>
-        <footer>
-          <Box
-            sx={{
-              marginInline: "auto",
-              maxWidth: "25ch",
-              textAlign: "center",
-              marginBottom: "1rem",
-            }}
-          >
-            Created by{" "}
-            <a
-              href="https://linkedin.com/damianstyczen"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Damian Styczeń
-            </a>{" "}
-            for{" "}
-            <a
-              href="https://www.omnicalculator.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Omni Calculator
-            </a>
-          </Box>
-        </footer>
       </Box>
+      <footer data-testid="footer">
+        <Box
+          sx={{
+            marginInline: "auto",
+            maxWidth: "25ch",
+            textAlign: "center",
+            marginBottom: "1rem",
+          }}
+        >
+          Created by{" "}
+          <a
+            href="https://linkedin.com/damianstyczen"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Damian Styczeń
+          </a>{" "}
+          for{" "}
+          <a
+            href="https://www.omnicalculator.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Omni Calculator
+          </a>
+        </Box>
+      </footer>
     </Box>
   );
 }

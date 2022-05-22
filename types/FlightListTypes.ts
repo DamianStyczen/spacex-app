@@ -28,15 +28,13 @@ export type Ship =
         landing_vehicle: string;
         flight: number;
         land_success: boolean;
-        landing_type: string;
+        landing_type: string | null;
         landing_intent: boolean;
-        reused: boolean;
       }[]
     },
     second_stage: {
       payloads: {
         id: string | null;
-        reused: boolean;
         payload_type: string;
         payload_mass_kg: number | null;
         orbit: string;

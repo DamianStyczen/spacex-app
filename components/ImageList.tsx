@@ -31,10 +31,11 @@ export default function ImageList({ images, missionName }: ImageListProps) {
       <MuiImageList cols={3}>
         {images.map((url, index) => (
           <ImageListItem key={url} onClick={() => openFullImage(url)}>
-            <Image
+            <img
               src={url}
               alt={`${missionName} - image ${index + 1}`}
               loading="lazy"
+              data-testid="image"
             />
           </ImageListItem>
         ))}
@@ -45,10 +46,11 @@ export default function ImageList({ images, missionName }: ImageListProps) {
         onClose={() => setIsImageOpen(false)}
       >
         <Box sx={fullImageBoxStyles}>
-          <Image
+          <img
             src={chosenImage}
             alt={`${missionName} - full size`}
             style={{ maxHeight: "80vh", maxWidth: "80vw" }}
+            data-testid="full-image"
           />
         </Box>
       </Modal>

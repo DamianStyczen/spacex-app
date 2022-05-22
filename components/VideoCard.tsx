@@ -21,6 +21,7 @@ export default function VideoCard({ url }: VideoCardProps) {
         component="iframe"
         src={`https://www.youtube.com/embed/${youtubeId}?mute=1`}
         style={{ aspectRatio: "16 / 9" }}
+        data-testid="video"
       />
     </Card>
   );

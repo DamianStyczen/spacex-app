@@ -115,7 +115,7 @@ export default function FlightList({
           height: loaderHeight,
         }}
       >
-        <CircularProgress />
+        <CircularProgress data-testid="launches-loader" />
       </TableCell>
     </TableRow>
   );
@@ -154,7 +154,7 @@ export default function FlightList({
               ))}
             </TableRow>
           </TableHead>
-          <TableBody ref={tableBodyRef}>
+          <TableBody ref={tableBodyRef} data-testid="launches-table-body">
             {isLoading ? loader : output}
           </TableBody>
         </Table>

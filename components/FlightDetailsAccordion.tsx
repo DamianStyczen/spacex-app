@@ -7,14 +7,12 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 type FlightDetailsAccordionProps = {
   title: string;
-  index: number;
   children?: ReactNode;
   disabled?: boolean;
 };
 
 export default function FlightDetailsAccordion({
   title,
-  index,
   children,
   disabled,
 }: FlightDetailsAccordionProps) {
@@ -22,8 +20,8 @@ export default function FlightDetailsAccordion({
     <Accordion>
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}
-        aria-controls={`panel${index}-content`}
-        id={`panel${index}-header`}
+        aria-controls={`panel-${title}-content`}
+        id={`panel-${title}-header`}
         disabled={disabled}
       >
         <Typography>{title}</Typography>

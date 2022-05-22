@@ -3,7 +3,7 @@ import Head from "next/head";
 import FlightDetails from "../../components/FlightDetails";
 import { Launch } from "../../types/FlightListTypes";
 import Layout from "../../components/Layout";
-import { initializeApollo, addApolloState } from "../../lib/apolloClient";
+import { initializeApollo } from "../../lib/apolloClient";
 import { gql } from "@apollo/client";
 
 interface LaunchDetailsPageProps {
@@ -32,7 +32,6 @@ export const LAUNCH_DETAILS_QUERY = gql`
             landing_type
             land_success
             landing_intent
-            reused
           }
         }
         second_stage {
@@ -68,22 +67,30 @@ const LaunchDetailsPage = ({ data }: LaunchDetailsPageProps) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  const apolloClient = initializeApollo();
+  try {
+    const apolloClient = initializeApollo();
 
-  const queryVariables = {
-    id: params?.id,
-  };
+    const queryVariables = {
+      id: params?.id,
+    };
 
-  const { data } = await apolloClient.query({
-    query: LAUNCH_DETAILS_QUERY,
-    variables: queryVariables,
-  });
+    const { data } = await apolloClient.query({
+      query: LAUNCH_DETAILS_QUERY,
+      variables: queryVariables,
+    });
 
-  return {
-    props: {
-      data: data.launch,
-    },
-  };
+    if (!data.launch) {
+      throw new Error();
+    }
+
+    return {
+      props: {
+        data: data.launch,
+      },
+    };
+  } catch (e) {
+    return { notFound: true };
+  }
 };
 
 export default LaunchDetailsPage;
